@@ -496,7 +496,7 @@ jobs:
           chmod +x ${DIY_P2_SH}
           cd openwrt/
           ${{ github.workspace }}/${DIY_P2_SH} "${{ inputs.openwrt_ip }}" "${{ inputs.use_ccache }}"
-
+    
       - name: Download package
         id: package
         run: |
@@ -529,7 +529,11 @@ jobs:
           key: openwrt-${{ env.REPO_NAME }}-${{ env.source_hash }}
           restore-keys: |
             openwrt-${{ env.REPO_NAME }}-
-
+      - name: Check qmi_helpers config
+        run: |
+          cd openwrt
+          grep -E 'CONFIG_QCOM_QMI_HELPERS|CONFIG_MAC80211|CONFIG_BACKPORT' .config || true
+          grep -R -n 'QCOM_QMI_HELPERS' target/linux package/kernel/mac80211 package/kernel/linux 2>/dev/null | head -50
       - name: Compile the OpenWrt firmware
         id: compile
         run: |
