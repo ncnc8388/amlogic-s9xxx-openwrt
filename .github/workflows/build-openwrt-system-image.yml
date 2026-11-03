@@ -505,7 +505,15 @@ jobs:
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
+          
+      - name: Disable QCOM QMI helpers package
+        run: |
+          cd openwrt
+          sed -i '/^CONFIG_PACKAGE_kmod-qcom-qmi-helpers=/d' .config
+          echo '# CONFIG_PACKAGE_kmod-qcom-qmi-helpers is not set' >> .config
 
+          echo "===== Verify QCOM package config ====="
+          grep -n 'CONFIG_PACKAGE_kmod-qcom-qmi-helpers' .config || true
       - name: Get OpenWrt source commit hash
         id: openwrthash
         run: |
