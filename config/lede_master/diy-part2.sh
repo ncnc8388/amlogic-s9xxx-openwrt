@@ -43,6 +43,12 @@ else
     echo "# CONFIG_CCACHE is not set" >>.config
     echo 'CONFIG_CCACHE_DIR=""' >>.config
 fi
+# Fix duplicate QCOM_QMI_HELPERS in kernel and mac80211 backports
+sed -i '/^CONFIG_PACKAGE_kmod-qcom-qmi-helpers=y$/d' .config
+echo "# CONFIG_PACKAGE_kmod-qcom-qmi-helpers is not set" >> .config
+
+echo "===== QCOM_QMI_HELPERS configuration ====="
+grep -n 'QCOM_QMI_HELPERS' .config || true
 #
 # ------------------------------- Main source ends -------------------------------
 
