@@ -539,7 +539,11 @@ jobs:
 
           echo "===== ath.mk ====="
           sed -n '35,60p' package/kernel/mac80211/ath.mk
-      
+          echo "===== backports qmi config ====="
+          grep -n 'QCOM_QMI_HELPERS' build_dir/target-aarch64_generic_musl/linux-armsr_armv8/mac80211-regular/backports-6.18.39/.config || true
+
+          echo "===== qmi package selection ====="
+          grep -n 'CONFIG_PACKAGE_kmod-qcom-qmi-helpers' .config || true
       - name: Compile the OpenWrt firmware
         id: compile
         run: |
