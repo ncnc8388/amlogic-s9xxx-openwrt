@@ -323,7 +323,7 @@ on:
       use_ccache:
         description: "Auto use ccache."
         required: false
-        default: false
+        default: true
         type: boolean
       openwrt_storage:
         description: "Select image storage type."
@@ -574,7 +574,9 @@ jobs:
           cd openwrt/
           echo -e "Compiling with $(nproc) threads"
           make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
-
+          B="build_dir/target-aarch64_generic_musl/linux-armsr_armv8/mac80211-regular/backports-6.18.39"
+          echo "===== Backports QMI config ====="
+          grep -nE 'QCOM_QMI_HELPERS|CPTCFG_QCOM' "$B/.config" || true
           echo -e "ccache statistics:"
           ccache -s 2>/dev/null
           echo -e "ccache directory size:"
