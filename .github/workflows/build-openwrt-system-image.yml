@@ -12,7 +12,7 @@ on:
       source_branch:
         description: "Select the source branch"
         required: false
-        default: "all"
+        default: "lede_master"
         type: choice
         options:
           - all
@@ -22,7 +22,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "s905l3b-m302a"
         type: choice
         options:
           - all
@@ -298,7 +298,7 @@ on:
       auto_kernel:
         description: "Auto use the latest kernel"
         required: false
-        default: true
+        default: false
         type: boolean
       kernel_repo:
         description: "Set the kernel repository"
@@ -310,7 +310,7 @@ on:
       kernel_usage:
         description: "Set the tags of the stable kernel."
         required: false
-        default: "stable"
+        default: "flippy"
         type: choice
         options:
           - stable
@@ -319,11 +319,11 @@ on:
       openwrt_ip:
         description: "Set OpenWrt default IP address."
         required: false
-        default: "192.168.1.1"
+        default: "192.168.1.131"
       use_ccache:
         description: "Auto use ccache."
         required: false
-        default: true
+        default: false
         type: boolean
       openwrt_storage:
         description: "Select image storage type."
@@ -552,15 +552,21 @@ jobs:
 
           echo "===== qmi package selection ====="
           grep -n 'CONFIG_PACKAGE_kmod-qcom-qmi-helpers' .config || true
-      - name: Check QMI final config
+      - name: Check QCOM backports config
         run: |
           cd openwrt
-          echo "===== final .config ====="
+
+          echo "===== OpenWrt config ====="
           grep -nE 'QCOM_QMI_HELPERS|kmod-qcom-qmi-helpers' .config || true
 
-          echo "===== package selection ====="
-          grep -n 'CONFIG_PACKAGE_kmod-qcom-qmi-helpers' .config || true
-      
+          echo "===== mac80211 package config ====="
+          grep -nE 'QCOM_QMI_HELPERS|QCOM_QMI' \
+            package/kernel/mac80211/ath.mk \
+            package/kernel/mac80211/ath-qualcommbe.mk || true
+
+          echo "===== backports build rules ====="
+          grep -n 'QCOM_QMI_HELPERS' \
+            package/kernel/mac80211/patches/build/100-backports-drop-QRTR-and-MHI.patch || true
       
       - name: Compile the OpenWrt firmware
         id: compile
