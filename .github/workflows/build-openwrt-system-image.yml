@@ -544,6 +544,16 @@ jobs:
 
           echo "===== qmi package selection ====="
           grep -n 'CONFIG_PACKAGE_kmod-qcom-qmi-helpers' .config || true
+      - name: Check QMI final config
+        run: |
+          cd openwrt
+          echo "===== final .config ====="
+          grep -nE 'QCOM_QMI_HELPERS|kmod-qcom-qmi-helpers' .config || true
+
+          echo "===== package selection ====="
+          grep -n 'CONFIG_PACKAGE_kmod-qcom-qmi-helpers' .config || true
+      
+      
       - name: Compile the OpenWrt firmware
         id: compile
         run: |
