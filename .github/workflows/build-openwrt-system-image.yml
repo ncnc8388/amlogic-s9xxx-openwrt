@@ -479,13 +479,7 @@ jobs:
           cd openwrt/
           ./scripts/feeds update -a
 
-          echo "========== helloworld commit =========="
-          git -C feeds/helloworld rev-parse HEAD
-          git -C feeds/helloworld log -1 --format="%H %ci %s"
-
-          echo "========== xray-core Makefile =========="
-          grep -nE '^(PKG_VERSION|PKG_RELEASE|PKG_HASH|PKG_SOURCE_URL)' feeds/helloworld/xray-core/Makefile
-
+        
       - name: Install feeds
         run: cd openwrt/ && ./scripts/feeds install -a
 
