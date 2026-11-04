@@ -567,7 +567,11 @@ jobs:
           echo "===== backports build rules ====="
           grep -n 'QCOM_QMI_HELPERS' \
             package/kernel/mac80211/patches/build/100-backports-drop-QRTR-and-MHI.patch || true
-      
+          echo "===== Find BACKPORTED_QCOM_QMI_HELPERS ====="
+          grep -R -nE 'BACKPORTED_QCOM_QMI_HELPERS|QCOM_QMI_HELPERS' \
+            package/kernel/mac80211/patches \
+            build_dir/target-aarch64_generic_musl/linux-armsr_armv8/mac80211-regular/backports-6.18.39 2>/dev/null \
+            | head -100
       - name: Compile the OpenWrt firmware
         id: compile
         run: |
