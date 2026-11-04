@@ -538,7 +538,19 @@ jobs:
           grep -R -n 'QCOM_QMI_HELPERS' target/linux package/kernel/mac80211 package/kernel/linux 2>/dev/null | head -50
           echo "===== backports patch content ====="
           sed -n '1,100p' package/kernel/mac80211/patches/build/100-backports-drop-QRTR-and-MHI.patch
+          
 
+          echo "===== patch file status ====="
+          ls -l package/kernel/mac80211/patches/build/100-backports-drop-QRTR-and-MHI.patch
+
+          echo "===== patch full content ====="
+          cat package/kernel/mac80211/patches/build/100-backports-drop-QRTR-and-MHI.patch
+
+          echo "===== QMI references in ath.mk ====="
+          grep -n -C 5 'QMI_HELPERS' package/kernel/mac80211/ath.mk || true
+
+          echo "===== QMI references in patch directory ====="
+          grep -R -n -C 3 'QCOM_QMI_HELPERS' package/kernel/mac80211/patches/ || true
           echo "===== ath.mk ====="
           sed -n '35,60p' package/kernel/mac80211/ath.mk
           echo "===== backports qmi config ====="
