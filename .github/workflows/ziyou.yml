@@ -484,7 +484,10 @@ jobs:
 
       - name: Load custom configuration
         run: |
-          [[ -d "files" ]] && mv -f files openwrt/files
+          if [[ -d "files" ]]; then
+            mkdir -p openwrt/files
+            cp -a files/. openwrt/files/
+          fi
           [[ -e "${CONFIG_FILE}" ]] && cp -f ${CONFIG_FILE} openwrt/.config
           chmod +x ${DIY_P2_SH}
           cd openwrt/
